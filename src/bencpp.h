@@ -5,11 +5,6 @@
 #ifndef BENCPP_BENCPP_H
 #define BENCPP_BENCPP_H
 
-#include "ComparableCounter.h"
-#include <functional>
-#include <algorithm>
-#include <map>
-
 template<class Data, class Output>
 class Subject {
 public:

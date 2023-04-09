@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 #include "../../src/bencpp.h"
 #include "../dataStructures/Avl.hpp"
+#include <algorithm>
 
 struct SearchTreeData {
     std::vector<int> array;
@@ -43,7 +44,7 @@ public:
     }
 };
 
-TEST(bencpp, dataStructures) {
+TEST(bencpp, search_tree_search_correctness_check) {
     std::vector<Subject<SearchTreeData, bool>*> subjects = {new AvlSubject(), new BstSubject()};
     Researcher<SearchTreeData, bool, bool> *researcher = new SearchTreeResearcher();
     Experiment<SearchTreeData, bool, bool> experiment = Experiment(subjects, researcher);

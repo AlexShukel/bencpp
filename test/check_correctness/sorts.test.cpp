@@ -9,23 +9,6 @@
 #include <utility>
 #include <vector>
 
-TEST(bencpp, ComparableCounter) {
-    std::vector<ComparableCounter<int>> data1 = {1, 6, 3, 2, 9, 12, 2, 0, 84};
-    bubbleSort(data1);
-    EXPECT_GT(ComparableCounter<int>::comparisons, 0);
-    EXPECT_GT(ComparableCounter<int>::assignments, 0);
-
-    ComparableCounter<int>::resetCounters();
-
-    EXPECT_EQ(ComparableCounter<int>::comparisons, 0);
-    EXPECT_EQ(ComparableCounter<int>::assignments, 0);
-
-    std::vector<ComparableCounter<int>> data2 = {1, 6, 3, 2, 9, 12, 2, 0, 84};
-    cocktailShakerSort(data2);
-    EXPECT_GT(ComparableCounter<int>::comparisons, 0);
-    EXPECT_GT(ComparableCounter<int>::assignments, 0);
-}
-
 bool isSorted(const std::vector<int> &arr) {
     for (int i = 0; i < arr.size() - 1; ++i) {
         if (arr[i] > arr[i + 1]) {
@@ -57,7 +40,7 @@ public:
     }
 };
 
-TEST(bencpp, simpleExperiment) {
+TEST(bencpp, sorts_correctness_check) {
     std::vector<Subject<std::vector<int>, std::vector<int>> *> subjects = {new SortSubject(bubbleSort<int>),
                                                                            new SortSubject(
                                                                                        cocktailShakerSort<int>)};
