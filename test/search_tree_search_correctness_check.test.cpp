@@ -3,8 +3,8 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/bencpp.h"
-#include "../dataStructures/Avl.hpp"
+#include "../src/bencpp.h"
+#include "dataStructures/Avl.hpp"
 #include <algorithm>
 
 struct SearchTreeData {
@@ -14,16 +14,17 @@ struct SearchTreeData {
 
 class AvlSubject : public Subject<SearchTreeData, bool> {
 public:
-    [[nodiscard]] bool run(SearchTreeData data) const override {
+    bool run(SearchTreeData data) override {
         Avl<int> avl;
         avl.insertFromVector(data.array);
-        return avl.has(data.value);
+        bool retVal = avl.has(data.value);
+        return retVal;
     }
 };
 
 class BstSubject : public Subject<SearchTreeData, bool> {
 public:
-    [[nodiscard]] bool run(SearchTreeData data) const override {
+    bool run(SearchTreeData data) override {
         Bst<int> bst;
         bst.insertFromVector(data.array);
         return bst.has(data.value);
@@ -32,7 +33,9 @@ public:
 
 class SearchTreeResearcher : public Researcher<SearchTreeData, bool, bool> {
 public:
-    bool evaluate(const Subject<SearchTreeData, bool> *subject) override {
+    bool evaluate(Subject<SearchTreeData, bool> *subject) override {
+        auto data = getData();
+
         int valueToFind = data.value;
         bool exists = std::any_of(data.array.begin(), data.array.end(), [valueToFind](int &number) {
             return number == valueToFind;

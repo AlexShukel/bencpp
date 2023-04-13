@@ -1,4 +1,4 @@
-FILE(GLOB TEST_FILES **/*test.cpp)
+FILE(GLOB TEST_FILES **/*.test.cpp *.test.cpp utils.cpp)
 
 add_executable(bencppTest ${TEST_FILES})
 

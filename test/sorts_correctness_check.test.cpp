@@ -3,9 +3,9 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/bencpp.h"
-#include "../sorts/bubbleSort.h"
-#include "../sorts/cocktailShakerSort.h"
+#include "../src/bencpp.h"
+#include "sorts/bubbleSort.h"
+#include "sorts/cocktailShakerSort.h"
 #include <utility>
 #include <vector>
 
@@ -26,7 +26,7 @@ private:
 public:
     explicit SortSubject(std::function<void(std::vector<int> &)> sort) : sort(std::move(sort)) {};
 
-    [[nodiscard]] std::vector<int> run(std::vector<int> input) const override {
+    std::vector<int> run(std::vector<int> input) override {
         sort(input);
         return input;
     }
@@ -34,8 +34,8 @@ public:
 
 class SortResearcher : public Researcher<std::vector<int>, std::vector<int>, bool> {
 public:
-    bool evaluate(const Subject<std::vector<int>, std::vector<int>> *subject) override {
-        std::vector<int> sortedArr = subject->run(data);
+    bool evaluate(Subject<std::vector<int>, std::vector<int>> *subject) override {
+        std::vector<int> sortedArr = subject->run(getData());
         return isSorted(sortedArr);
     }
 };

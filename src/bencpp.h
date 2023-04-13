@@ -7,48 +7,94 @@
 
 #include "ArithmeticCounter.h"
 #include "ComparisonCounter.h"
+#include "Timer.h"
 #include <functional>
 
 template<class Data, class Output>
 class Subject {
+private:
+    Timer *timer;
+
+protected:
+    Timer *getTimer() {
+        return timer;
+    }
+
 public:
-    explicit Subject() = default;
+    explicit Subject() : timer(nullptr) {};
+
+    explicit Subject(Timer *timer) : timer(timer) {};
 
     virtual ~Subject() = default;
 
-    virtual Output run(Data input) const = 0;
+    virtual Output run(Data input) = 0;
+};
+
+template<class Data, class Output>
+class FunctionSubject : public Subject<Data, Output> {
+private:
+    std::function<Output(Data)> func;
+
+public:
+    explicit FunctionSubject(const std::function<Output(Data)> &func) : func(func) {};
+
+    Output run(Data input) override {
+        return func(input);
+    }
 };
 
 template<class Data, class Output, class Criteria>
 class Researcher {
-protected:
+private:
     Data data;
+    Timer *timer;
+
+protected:
+    Data getData() {
+        return data;
+    }
+
+    Timer *getTimer() {
+        return timer;
+    }
 
 public:
-    void setData(Data newData) {
-        data = newData;
-    }
+    explicit Researcher() : timer(nullptr) {};
+
+    explicit Researcher(Timer *timer) : timer(timer) {};
 
     virtual ~Researcher() = default;
 
-    virtual Criteria evaluate(const Subject<Data, Output> *subject) = 0;
+    virtual Criteria evaluate(Subject<Data, Output> *subject) = 0;
+
+    void setData(Data newData) {
+        data = newData;
+    }
 };
 
 template<class Data, class Output, class Criteria>
 class Experiment {
 private:
+    Timer *timer;
     std::vector<Subject<Data, Output> *> subjects;
     Researcher<Data, Output, Criteria> *researcher;
 
 public:
-    Experiment() = default;
+    Experiment(const std::vector<Subject<Data, Output> *> &subjects,
+               Researcher<Data, Output, Criteria> *researcher) : timer(nullptr), subjects(subjects),
+                                                                 researcher(researcher) {};
 
-    explicit Experiment(const std::vector<Subject<Data, Output> *> &subjects,
-                        Researcher<Data, Output, Criteria> *researcher) : subjects(subjects),
-                                                                          researcher(researcher) {};
+    Experiment(std::function<std::vector<Subject<Data, Output> *>(Timer *)> createSubjects,
+               std::function<Researcher<Data, Output, Criteria> *(Timer *)> createResearcher) {
+        timer = new Timer();
+        subjects = createSubjects(timer);
+        researcher = createResearcher(timer);
+    };
+
     ~Experiment() {
+        delete timer;
         delete researcher;
-        for (auto &subject : subjects) {
+        for (auto &subject: subjects) {
             delete subject;
         }
     }

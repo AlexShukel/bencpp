@@ -3,9 +3,9 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/bencpp.h"
-#include "../sorts/bubbleSort.h"
-#include "../sorts/cocktailShakerSort.h"
+#include "../src/bencpp.h"
+#include "sorts/bubbleSort.h"
+#include "sorts/cocktailShakerSort.h"
 
 struct SortMetrics {
     size_t comparisons;
@@ -17,14 +17,14 @@ typedef std::vector<ComparisonCounter<int>> Data;
 typedef std::vector<ComparisonCounter<int>> Output;
 typedef SortMetrics Criteria;
 
-class SortSubject : public Subject<Data, Output> {
+class SortComparisonsSubject : public Subject<Data, Output> {
 private:
     std::function<void(Data &)> sort;
 
 public:
-    explicit SortSubject(std::function<void(Data &)> sort) : sort(std::move(sort)) {};
+    explicit SortComparisonsSubject(std::function<void(Data &)> sort) : sort(std::move(sort)) {};
 
-    [[nodiscard]] Output run(Data input) const override {
+    Output run(Data input) override {
         sort(input);
         return input;
     }
@@ -32,10 +32,10 @@ public:
 
 class ComparisonResearcher : public Researcher<Data, Output, Criteria> {
 public:
-    Criteria evaluate(const Subject<Data, Output> *subject) override {
+    Criteria evaluate(Subject<Data, Output> *subject) override {
         ComparisonCounter<int>::resetCounters();
 
-        auto sortedArr = subject->run(data);
+        auto sortedArr = subject->run(getData());
 
         return {
                 .comparisons = ComparisonCounter<int>::comparisons,
@@ -46,8 +46,8 @@ public:
 };
 
 TEST(bencpp, sorts_comparisons_count) {
-    std::vector<Subject<Data, Output> *> subjects = {new SortSubject(bubbleSort<ComparisonCounter<int>>),
-                                                     new SortSubject(cocktailShakerSort<ComparisonCounter<int>>)};
+    std::vector<Subject<Data, Output> *> subjects = {new SortComparisonsSubject(bubbleSort<ComparisonCounter<int>>),
+                                                     new SortComparisonsSubject(cocktailShakerSort<ComparisonCounter<int>>)};
 
     Researcher<Data, Output, Criteria> *researcher = new ComparisonResearcher();
 
