@@ -33,6 +33,8 @@ public:
         assignments = 0;
     }
 
+    ComparisonCounter() = default;
+
     ComparisonCounter(const T &value) : value(value) {};
 
     // Copy constructor

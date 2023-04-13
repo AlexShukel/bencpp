@@ -35,6 +35,8 @@ public:
         assignments = 0;
     }
 
+    ArithmeticCounter() = default;
+
     ArithmeticCounter(const T &value) : value(value) {};
 
     // Copy constructor

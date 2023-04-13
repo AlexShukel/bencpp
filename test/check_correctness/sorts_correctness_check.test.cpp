@@ -43,7 +43,7 @@ public:
 TEST(bencpp, sorts_correctness_check) {
     std::vector<Subject<std::vector<int>, std::vector<int>> *> subjects = {new SortSubject(bubbleSort<int>),
                                                                            new SortSubject(
-                                                                                       cocktailShakerSort<int>)};
+                                                                                   cocktailShakerSort<int>)};
 
     Researcher<std::vector<int>, std::vector<int>, bool> *researcher = new SortResearcher();
 
@@ -52,7 +52,7 @@ TEST(bencpp, sorts_correctness_check) {
     std::vector<int> arr = {1, 3, 2};
     auto results = experiment.run(arr);
 
-    for (auto r : results) {
+    for (auto r: results) {
         EXPECT_EQ(r, true);
     }
 }

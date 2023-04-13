@@ -1,4 +1,4 @@
-FILE(GLOB TEST_FILES check_correctness/*test.cpp counters/*.test.cpp *.test.cpp)
+FILE(GLOB TEST_FILES **/*test.cpp)
 
 add_executable(bencppTest ${TEST_FILES})
 

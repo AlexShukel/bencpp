@@ -5,6 +5,10 @@
 #ifndef BENCPP_BENCPP_H
 #define BENCPP_BENCPP_H
 
+#include "ArithmeticCounter.h"
+#include "ComparisonCounter.h"
+#include <functional>
+
 template<class Data, class Output>
 class Subject {
 public:
