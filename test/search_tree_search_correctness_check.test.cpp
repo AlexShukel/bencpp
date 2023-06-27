@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../src/bencpp.h"
+#include "bencpp.h"
 #include "dataStructures/Avl.hpp"
 #include <algorithm>
 

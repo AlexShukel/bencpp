@@ -4,7 +4,7 @@
 
 #include <iomanip>
 #include "gtest/gtest.h"
-#include "../src/bencpp.h"
+#include "bencpp.h"
 #include "sorts/bubbleSort.h"
 #include "sorts/cocktailShakerSort.h"
 #include "utils.h"

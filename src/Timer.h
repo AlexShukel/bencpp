@@ -7,7 +7,6 @@
 
 #include <chrono>
 
-// TODO: move implementation in cpp file
 class Timer {
 private:
     std::chrono::time_point<std::chrono::steady_clock> startTime;
@@ -15,31 +14,11 @@ private:
     bool computing = false;
 
 public:
-    void start() {
-        if (computing) {
-            throw std::logic_error("Cannot start a timer when it is already started.");
-        }
+    void start();
 
-        startTime = std::chrono::high_resolution_clock::now();
-        computing = true;
-    }
+    void end();
 
-    void end() {
-        if (!computing) {
-            throw std::logic_error("Cannot end a timer when it is already ended.");
-        }
-
-        endTime = std::chrono::high_resolution_clock::now();
-        computing = false;
-    }
-
-    double getSeconds() {
-        std::chrono::duration<double> diff = endTime - startTime;
-
-        double ans = diff.count();
-
-        return ans;
-    }
+    double getSeconds();
 };
 
 #endif //BENCPP_TIMER_H
