@@ -34,7 +34,7 @@ public:
 class SearchTreeResearcher : public Researcher<SearchTreeData, bool, bool> {
 public:
     bool evaluate(Subject<SearchTreeData, bool> *subject) override {
-        auto data = getData();
+        auto data = getInput();
 
         int valueToFind = data.value;
         bool exists = std::any_of(data.array.begin(), data.array.end(), [valueToFind](int &number) {

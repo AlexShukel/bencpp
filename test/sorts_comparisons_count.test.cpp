@@ -35,7 +35,7 @@ public:
     Criteria evaluate(Subject<Data, Output> *subject) override {
         ComparisonCounter<int>::resetCounters();
 
-        auto sortedArr = subject->run(getData());
+        auto sortedArr = subject->run(getInput());
 
         return {
                 .comparisons = ComparisonCounter<int>::comparisons,

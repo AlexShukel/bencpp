@@ -33,7 +33,7 @@ public:
     explicit SortTimeResearcher(Timer *timer) : Researcher(timer) {};
 
     double evaluate(Subject<std::vector<int>, std::vector<int>> *subject) override {
-        std::vector<int> sortedArr = subject->run(getData());
+        std::vector<int> sortedArr = subject->run(getInput());
         return getTimer()->getSeconds();
     }
 };

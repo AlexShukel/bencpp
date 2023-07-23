@@ -10,7 +10,7 @@
 #include "Timer.h"
 #include <functional>
 
-template<class Data, class Output>
+template<class Input, class Output>
 class Subject {
 private:
     Timer *timer;
@@ -27,31 +27,31 @@ public:
 
     virtual ~Subject() = default;
 
-    virtual Output run(Data input) = 0;
+    virtual Output run(Input input) = 0;
 };
 
-template<class Data, class Output>
-class FunctionSubject : public Subject<Data, Output> {
+template<class Input, class Output>
+class FunctionSubject : public Subject<Input, Output> {
 private:
-    std::function<Output(Data)> func;
+    std::function<Output(Input)> func;
 
 public:
-    explicit FunctionSubject(const std::function<Output(Data)> &func) : func(func) {};
+    explicit FunctionSubject(const std::function<Output(Input)> &func) : func(func) {};
 
-    Output run(Data input) override {
+    Output run(Input input) override {
         return func(input);
     }
 };
 
-template<class Data, class Output, class Criteria>
+template<class Input, class Output, class Criteria>
 class Researcher {
 private:
-    Data data;
+    Input input;
     Timer *timer;
 
 protected:
-    Data getData() {
-        return data;
+    Input getInput() {
+        return input;
     }
 
     Timer *getTimer() {
@@ -65,27 +65,27 @@ public:
 
     virtual ~Researcher() = default;
 
-    virtual Criteria evaluate(Subject<Data, Output> *subject) = 0;
+    virtual Criteria evaluate(Subject<Input, Output> *subject) = 0;
 
-    void setData(Data newData) {
-        data = newData;
+    void setInput(Input newInput) {
+        input = newInput;
     }
 };
 
-template<class Data, class Output, class Criteria>
+template<class Input, class Output, class Criteria>
 class Experiment {
 private:
     Timer *timer;
-    std::vector<Subject<Data, Output> *> subjects;
-    Researcher<Data, Output, Criteria> *researcher;
+    std::vector<Subject<Input, Output> *> subjects;
+    Researcher<Input, Output, Criteria> *researcher;
 
 public:
-    Experiment(const std::vector<Subject<Data, Output> *> &subjects,
-               Researcher<Data, Output, Criteria> *researcher) : timer(nullptr), subjects(subjects),
+    Experiment(const std::vector<Subject<Input, Output> *> &subjects,
+               Researcher<Input, Output, Criteria> *researcher) : timer(nullptr), subjects(subjects),
                                                                  researcher(researcher) {};
 
-    Experiment(std::function<std::vector<Subject<Data, Output> *>(Timer *)> createSubjects,
-               std::function<Researcher<Data, Output, Criteria> *(Timer *)> createResearcher) {
+    Experiment(std::function<std::vector<Subject<Input, Output> *>(Timer *)> createSubjects,
+               std::function<Researcher<Input, Output, Criteria> *(Timer *)> createResearcher) {
         timer = new Timer();
         subjects = createSubjects(timer);
         researcher = createResearcher(timer);
@@ -99,11 +99,11 @@ public:
         }
     }
 
-    std::vector<Criteria> run(Data data) {
-        researcher->setData(data);
+    std::vector<Criteria> run(Input input) {
+        researcher->setInput(input);
         std::vector<Criteria> result;
 
-        for (Subject<Data, Output> *&subject: subjects) {
+        for (Subject<Input, Output> *&subject: subjects) {
             result.push_back(researcher->evaluate(subject));
         }
 
